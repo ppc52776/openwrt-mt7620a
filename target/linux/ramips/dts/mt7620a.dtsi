@@ -195,8 +195,8 @@
 			interrupt-parent = <&intc>;
 			interrupts = <10>;
 
-			dmas = <&gdma 4>,
-				<&gdma 5>;
+			dmas = <&gdma 2>,
+				<&gdma 3>;
 			dma-names = "tx", "rx";
 
 			status = "disabled";
@@ -246,7 +246,7 @@
 		};
 
 		pcm@2000 {
-			compatible = "ralink,mt7620a-pcm";
+			compatible = "ralink,mt7620a-pcm", "ralink,rt5350-pcm";
 			reg = <0x2000 0x800>;
 
 			resets = <&rstctrl 11>;
@@ -254,6 +254,9 @@
 
 			interrupt-parent = <&intc>;
 			interrupts = <4>;
+			
+			dmas = <&gdma 6>, <&gdma 4>;
+			dma-names = "tx", "rx";
 
 			status = "disabled";
 		};

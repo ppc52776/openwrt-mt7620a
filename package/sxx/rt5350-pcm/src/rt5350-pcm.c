@@ -191,12 +191,13 @@ static int rt5350_pcm_hw_params(struct snd_pcm_substream *substream,
 	return 0;
 }
 
-#define PCMCLOCK_OUT 0 // 256KHz
+//#define PCMCLOCK_OUT 0 // 256KHz
+#define PCMCLOCK_OUT 9 // 2.048MHz
 
 unsigned long i2sMaster_inclk_int[11] = {
-	78,     56,     52,     39,     28,     26,     19,     14,     13,     9,      6};
+	78,     56,     52,     39,     28,     26,     19,     14,  13,     9,      6};
 unsigned long i2sMaster_inclk_comp[11] = {
-	64,     352,    42,     32,     176,    21,     272,    88,     10,     455,    261};
+	64,     352,    42,     32,     176,    21,     272,    88,  10, 392/*455*/, 261};
 
 //FreqOut = FreqIn *(1/2) *{1 / [DIVINT+DIVCOMP/(512)]}
 
@@ -410,8 +411,10 @@ static int rt5350_pcm_dev_probe(struct platform_device *pdev)
 	iounmap(pcm->base);
 
 err_release_mem_region:
+	//dev_err(&pdev->dev, "ERR_RELEASE_MEM_REGION\n");
 	release_mem_region(pcm->mem->start, resource_size(pcm->mem));
 err_free:
+	//dev_err(&pdev->dev, "ERR_FREE\n");
 	kfree(pcm);
 
 	return ret;

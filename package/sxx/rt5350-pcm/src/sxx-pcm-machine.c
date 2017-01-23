@@ -31,7 +31,8 @@ static const struct snd_soc_dapm_route sxx_pcm_machine_routes[] = {
 };
 
 #define RT5350_DAIFMT (SND_SOC_DAIFMT_NB_NF | \
-			SND_SOC_DAIFMT_CBS_CFS) //rt5350 as slave
+			SND_SOC_DAIFMT_CBM_CFM) // rt5350 as master
+//			SND_SOC_DAIFMT_CBS_CFS) //rt5350 as slave
 
 static int sxx_pcm_machine_init(struct snd_soc_pcm_runtime *rtd)
 {

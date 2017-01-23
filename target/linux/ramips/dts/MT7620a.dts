@@ -42,25 +42,45 @@
 				};
 			};
 		};
+
+		gdma@2800 {
+			status = "okay";
+		};
+	
+		i2s: i2s@a00 {
+			/*status = "okay";*/
+		};
+	
+		pcm: pcm@2000 {
+			status = "okay";
+		};
+
 	};
 
 	pinctrl {
 		state_default: pinctrl0 {
 			gpio {
-				ralink,group = "i2c", "uartf";
+				ralink,group = "i2c";
 				ralink,function = "gpio";
+			};
+			pcm_i2s {
+				ralink,group = "uartf";
+				ralink,function = "pcm gpio";
 			};
 		};
 	};
 
 	ethernet@10100000 {
 		status = "okay";
+		mtd-mac-address = <&factory 0x4>;
 
 		pinctrl-names = "default";
-		pinctrl-0 = <&rgmii1_pins &rgmii2_pins &mdio_pins>;
+		/*pinctrl-0 = <&rgmii1_pins &rgmii2_pins &mdio_pins>;*/
+		pinctrl-0 = <&ephy_pins>;
 
 		ralink,port-map = "llllw";
 
+		/*
 		port@4 {
 			status = "okay";
 			phy-mode = "rgmii";
@@ -86,10 +106,16 @@
 				phy-mode = "rgmii";
 			};
 		};
+		*/
 	};
 
 	gsw@10110000 {
-		ralink,port4 = "gmac";
+		/*ralink,port4 = "gmac";*/
+		ralink,port4 = "ephy";
+	};
+
+	wmac@10180000 {
+		ralink,mtd-eeprom = <&factory 0>;
 	};
 
 	sdhci@10130000 {
@@ -124,4 +150,34 @@
 	ohci@101c1000 {
 		status = "okay";
 	};
+
+    codec: sxx-pcm-codec {
+		compatible = "ralink,sxx-pcm-codec";
+	};
+    
+    sound: sxx-pcm-machine {
+        compatible = "ralink,sxx-pcm-machine";
+        model = "sxx-pcm-machine";
+        cpu-dai = <&pcm>;
+        codec-dai = <&codec>;
+    };
+
+	spi {
+		compatible = "spi-gpio";
+		#address-cells = <0x1>;
+		ranges;
+
+		gpio-sck = <&gpio0 7 0>;
+		gpio-miso = <&gpio0 8 0>;
+		gpio-mosi = <&gpio0 9 0>;
+		cs-gpios = <&gpio0 10 1>;
+		num-chipselects = <1>;
+
+		spidev {
+			compatible = "rohm,dh2228fv";
+			spi-max-frequency = <30000000>;
+			reg = <0>;
+		};
+	};
+
 };
